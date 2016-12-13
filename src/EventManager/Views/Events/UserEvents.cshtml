@@ -1,26 +1,32 @@
 ﻿@model IEnumerable<EventManager.Models.Event>
 <h2>My Events</h2>
-<a asp-action="UserIndex" class="btn btn-danger">Back to List</a>
+<a asp-action="UserIndex" class="btn btn-danger">Back to Events</a>
 <br />
 @foreach (var show in Model)
 {
     <h4><b>@show.Artist.Name</b></h4>
-    <div class="main">
-        <div class="left">
-            <div class="upperleft">@show.Venue</div>
+    <div class="main" style="color:darkgreen">
+        <div class="right">
+            <div class="upperleft" style="background-color:grey">@show.Venue</div>
             <div><b>@show.Genre.Name</b></div>
         </div>
-        <div class="right">
-            <div><big><b>@show.Date.ToString("MMM").ToUpper()</b></big></div>
+        <div class="left">
+            <div class="upperleft" style="background-color:grey"><big><b>@show.Date.ToString("MMM").ToUpper()</b></big></div>
             <div>@show.Date.ToString("dd")</div>
         </div>
     </div>
+    <br />
     if (show.IsCancelled)
     {
         <div><b>Cancelled!</b></div>
     }
-    else
+    if(show.Date < DateTime.Today)
     {
-       <div><a class="btn btn-sm btn-danger" asp-action="Unattend" asp-route-id="@show.EventID">Unattend</a></div>
+        <div><b>This event has passed!</b></div>
     }
+    if(!show.IsCancelled)
+    {
+       <a class="btn btn-sm btn-danger" asp-action="Unattend" asp-route-id="@show.EventID">Unattend</a>
+    }
+    <a class="btn btn-sm btn-primary" asp-action="Details" asp-route-id="@show.EventID">Details</a>
 }
